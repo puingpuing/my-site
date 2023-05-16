@@ -1,0 +1,9 @@
+{% autoescape off %}
+안녕하세요!
+
+아래 링크를 통해 인증을 완료해주세요.
+
+회원가입 링크 : http://{{ domain }}{% url 'activate' uid=uid token=token %}
+
+감사합니다.
+{% endautoescape %}

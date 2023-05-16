@@ -1,0 +1,74 @@
+{% extends 'main/base.html' %}
+{% block bgimg %}
+{% block nav %}
+{% endblock %}
+<style>
+    .row-5 {
+        position:absolute;
+        left:40%;
+        top:40%;
+        font-size:10pt; font-family:'Courier New', Courier, monospace;
+
+    }
+</style>
+{% endblock %}
+</head>
+<body>
+    {% block navbd %}
+        <div class="row-5">
+            <div class="col-12">
+                <form action="{% url 'noticewrite' %}">
+                    <table class="table">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">제목</th>
+                            <th scope="col">아이디</th>
+                            <th scope="col">작성일</th>
+                            <th scope="col">VIEW</th>
+                        </tr>
+                        </thead>
+                
+                        <tbody>
+                        {% if notice_list %}
+                        {% for notice_board in page_obj %}
+                        <tr>
+                            <th scope="row">{{notice_board.id}}</th>
+                            <td><a href="notice/details/{{notice_board.id}}">{{notice_board.title}}</a></td>
+                            <td>{{notice_board.writer}}</td>
+                            <td>{{notice_board.created_at}}</td>
+                            <td>{{notice_board.view}}</td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <tr class="text-center">
+                            <td colspan="5">
+                                작성된 게시글이 없습니다.
+                            </td>
+                        </tr>
+                        {% endif %}
+                        </tbody>
+                    </table>
+                    {% if user %}
+                    <input class="btn btn-dark" type="submit" value="글쓰기">
+                    {% endif %}
+                </form>
+                <div class='pagination'>
+                    <a href = "?page=1"><<</a>
+                    {% if tmp.pre.has_previous %}
+                    <a href = "?page={{ tmp.pre.previous_page_number }}"><</a>
+                    {% endif %}
+                    {% for i in my_range|slice:5 %}
+                        <a href = "?page={{ i }}">{{i}}</a>
+                        {% if i|divisibleby:5  %}
+                            <a href = "?page={{ i|add:1 }}">></a>
+                        {% endif %}
+                    {% endfor %}
+                    <a href = "?page={{page_obj.paginator.num_pages}}">>></a>
+                </div>
+            </div>
+        </div>
+        {% endblock %}
+    </div>
+</body>
+</html>

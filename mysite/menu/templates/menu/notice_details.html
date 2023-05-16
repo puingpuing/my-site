@@ -1,0 +1,70 @@
+{% extends 'main/base.html' %}
+{% block bgimg %}
+{% block nav %}
+{% endblock %}
+<style>
+  .row-5 {
+      position:absolute;
+      left:40%;
+      top:40%;
+      font-size:10pt; font-family:'Courier New', Courier, monospace;
+
+  }
+
+</style>
+{% endblock %}
+</head>
+<body>
+    {% block navbd %}
+    <script>
+      function view(id){
+        var f=document.form;
+        if(document.getElementsByClassName("row-6")[id-1].style.display=="none"){
+          document.getElementsByClassName("row-6")[id-1].style.display="";
+        }else{
+          document.getElementsByClassName("row-6")[id-1].style.display="none";
+        }
+      }      
+    </script>
+    <div class="row-5">
+        <label for="title">제목</label>
+        view : {{notice_list.view}}
+      
+        <br>
+        <input
+        type="text"
+        class="form-control"
+        id="title"
+        value="{{ notice_list.title }}"
+        readonly
+      />
+      <br><br>
+      <label for="contents">내용</label>
+      <br>
+      <textarea class="form-control" readonly>{{ notice_list.contents }}</textarea>
+      <button onclick="history.back()">목록</button>
+      <br><br><br><br>
+      <form method="POST" action="{% url 'noticomment' notice_list.id %}">
+      <input type="hidden" value="{{notice_list.id}}" name="noti">
+      <input type="text" name="contents" />{% csrf_token %}
+      <button>댓글 달기</button>
+      
+    </form>
+      <br>
+      -------------------------------------
+      <br>{% for n in notice_list.noticomment_set.all %}
+        <p>-> {{n.contents}}</p> <a class="recomm" href="javascript:view({{n.id}});" >댓글</a>
+        <div class="row-6" style="display:none;">
+        <form method="POST" action="{% url 'recomment' n.id %}">
+        <input type="hidden" name="post_id" value="{{n.post_id}}" />
+        <input type="text" name="contents" />{% csrf_token %}
+        <button>대댓달기</button>
+        </form>
+        { % if n.}
+        {% include 'child_comment.html' %}
+        </div>
+        <hr>{% endfor %}
+      </div>
+      {% endblock %}
+    </body>
+    </html>

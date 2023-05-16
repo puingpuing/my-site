@@ -1,0 +1,41 @@
+{% extends 'main/base.html' %}
+{% block bgimg %}
+{% block nav %}
+{% endblock %}
+<style>
+  .row-5 {
+      position:absolute;
+      left:40%;
+      top:40%;
+      font-size:10pt; font-family:'Courier New', Courier, monospace;
+
+  }
+</style>
+{% endblock %}
+</head>
+<body>
+    {% block navbd %}
+    <div class="row-5">
+        <label for="title">제목</label>
+        view : {{rules_list.view}}
+      
+        <br>
+        <input
+        type="text"
+        class="form-control"
+        id="title"
+        value="{{ rules_list.title }}"
+        readonly
+      />
+      <br><br>
+      <label for="contents">내용</label>
+      <br>
+      <textarea class="form-control" readonly>{{ rules_list.contents }}</textarea>
+      <button onclick="history.back()">목록</button>
+      <br><br><br><br>
+      <input type="text" id="comment" />
+      <button>댓글 달기</button>
+    </div>
+      {% endblock %}
+    </body>
+    </html>

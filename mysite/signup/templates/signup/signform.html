@@ -1,0 +1,184 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" content="width=device-width, initial-scale=1"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        <script src="https://www.google.com/recaptcha/api.js"></script>
+       <!--
+           dont need yet
+        <script>
+            function onSubmit(token) {
+                document.getElementById("demo-form").submit();
+            }
+        </script>
+        -->
+        <script src="https://www.google.com/recaptcha/api.js?render=6LeVqOQZAAAAALSudHDcQYT241JGCt4ga-sAqtWD"></script>
+        <script>
+          grecaptcha.ready(function() 
+          {
+              grecaptcha.execute('6LeVqOQZAAAAALSudHDcQYT241JGCt4ga-sAqtWD', {action: "signform"}).then(function(token) {
+                document.getElementById('g-recaptcha-response').value = token;
+                });
+            });
+         </script>
+         <script src="{% static '/index.js' %}" type="text/javascript"></script>
+         <title>memo</title>
+         <style>
+             .bgimg {
+                 width: 100%;
+                 height: 100%;
+                 text-align: center;
+                 background-attachment:scroll;
+                 z-index: 1;
+                 font-size:10pt; font-family:'Courier New', Courier, monospace;
+             }
+                 
+             .bgimg::after {
+                 width: 100%;
+                 height: 100%;
+                 content: "";
+                 background: url("{% static '/backimg4.jpg' %}")no-repeat center center fixed; 
+                 position: fixed;
+                 background-size:  cover;
+                 top: 0;
+                 left: 0;
+                 z-index: -1;
+                 opacity: 0.4;
+             }
+ 
+             .a {
+                 border: 1px solid #ffffff;
+                 width: 500px;
+                 height: 80px;
+                 margin-left:auto;
+                 margin-right:auto;
+                 text-align: center;
+                 border-radius:0.4em;
+                 overflow: scroll;
+             }
+ 
+             table {
+                margin: auto; 
+                border-spacing: 0 30px;
+             }
+            
+                .tooltiptext {
+                    visibility: visible;
+                    width: 200px;
+                    background-color: #555;
+                    color: #fff;
+                    text-align: center;
+                    border-radius: 6px;
+                    padding: 5px 0;
+                    position: absolute;
+                    z-index: 1;
+                    bottom: 60%;
+                    left: 70%;
+                    margin-left: -60px;
+                    opacity: 0;
+                    transition: opacity 0.3s;
+                }
+
+                .tooltiptext::after { 
+                    content: "";
+                    position: absolute;
+                    top: 100%;
+                    left: 50%;
+                    margin-left: -5px;
+                    border-width: 5px;
+                    border-style: solid;
+                    border-color: #555 transparent transparent transparent;
+                }
+             
+             @media only screen and (min-width: 1024px) {
+                .tooltiptext {
+                    visibility: hidden;
+                    width: 200px;
+                    background-color: #555;
+                    color: #fff;
+                    text-align: center;
+                    border-radius: 6px;
+                    padding: 5px 0;
+                    position: absolute;
+                    z-index: 1;
+                    bottom: 30%;
+                    left: 70%;
+                    margin-left: -60px;
+                    opacity: 0;
+                    transition: opacity 0.3s;
+                }
+
+                .tooltiptext::after { 
+                    content: "";
+                    position: absolute;
+                    top: 100%;
+                    left: 50%;
+                    margin-left: -5px;
+                    border-width: 5px;
+                    border-style: solid;
+                    border-color: #555 transparent transparent transparent;
+                }
+             
+            }
+
+            #email:hover ~ .tooltiptext{
+                visibility: visible;
+                opacity: 1;
+            }
+            
+
+         </style>
+    </head>
+    <body style="text-align:center;">
+        <div class="bgimg">
+            <div style="padding:150px">
+                <a style="font-size:60pt; font-family: 'Courier New', Courier, monospace;">Register</a>
+            </div>
+            <form id="regi" name="register_form" method="post" action="#">{% csrf_token %}
+                <table>
+                    <tr>
+                        <td><a style="font-size:40pt; font-family: 'Courier New', Courier, monospace;">Email</a></td>
+                        <td><input id="email" style="width:250px; height:30px; font-family: 'Courier New', Courier, monospace; font-size:10pt" type="text" />
+                        <input style="font-size:20pt;" type="button" name="chkover" value="중복" onclick="dupchkemail()"/>
+                        <span class="tooltiptext">인증메일이 발송됩니다. 정확한 이메일 주소를 기입해주세요.</span>
+                        <div>
+                            <div id="alert_email"></div>
+                        </div>
+                    </td>
+                    <br/><br/>
+                    </tr>
+                    <tr>
+                        <td><a style="font-size:40pt;font-family: 'Courier New', Courier, monospace;">nickname</a></td>
+                        <td><input id="username" style="width:250px; height:30px;" type="text" />
+                        <input style="font-size:20pt;" type="button" name="chkover2" value="중복" onclick="dupchknick()"/>
+                        <div>
+                            <div id="alert_username"></div>
+                        </div>
+                    </td><br/><br/>
+                    </tr>
+                    <tr>
+                        <td><a style="font-size:40pt;font-family: 'Courier New', Courier, monospace;">password</a></td>
+                        <td><input style="width:250px; height:30px;" type="text" id="password" />
+                            <div>
+                                <div id="alert_password"></div>
+                            </div>
+                        </td><br/><br/>
+                    </tr>
+                    <tr>
+                        <td><a style="font-size:40pt;font-family: 'Courier New', Courier, monospace;">confirm password</a></td>
+                        <td><input style="width:250px; height:30px;" type="text" id="password2" />
+                            <div>
+                                <div id="alert_password2"></div>
+                            </div>
+                        </td><br/><br/>
+                    </tr>
+                </table>
+                <br>
+                <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response"> 
+                <input style="font-size:20pt;" type="button" value="확인" onclick="confirm2()"/>
+            </form>
+        </div>
+        </form>
+    </body>
+</html>
